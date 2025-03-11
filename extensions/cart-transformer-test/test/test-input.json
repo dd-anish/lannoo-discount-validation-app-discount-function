@@ -1,0 +1,30 @@
+{
+    "cart": {
+      "lines": [
+        {
+          "id": "gid://shopify/CartLine/1",
+          "quantity": 4,
+          "attribute": [],
+          "merchandise": {
+            "__typename": "ProductVariant",
+            "id": "gid://shopify/ProductVariant/123",
+            "title": "Book Sample",
+            "product": {
+              "id": "gid://shopify/Product/456",
+              "title": "Amazing Book"
+            }
+          },
+          "cost": {
+            "totalAmount": {
+              "amount": "120.00"
+            }
+          }
+        }
+      ],
+      "buyerIdentity": {
+        "customer": {
+          "id": "gid://shopify/Customer/789"
+        }
+      }
+    }
+  }
