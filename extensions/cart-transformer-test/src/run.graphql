@@ -1,8 +1,13 @@
-query RunInput {
+query Input {
   cart {
     lines {
       id
       quantity
+      merchandise {
+        ... on ProductVariant {
+          id
+        }
+      }
     }
   }
 }

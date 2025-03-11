@@ -19,7 +19,7 @@ const NO_CHANGES = {
 */
 export function run(input) {
 
-  console.log("✅ Cart Transformer Function is Running!");
+  console.log("✅ Cart Transformer Function is Running Fast!");
 
   return NO_CHANGES;
 };
