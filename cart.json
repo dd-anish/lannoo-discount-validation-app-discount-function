@@ -1,0 +1,49 @@
+{
+  "cart": {
+    "lines": [
+      {
+        "id": "gid://shopify/CartLine/17777431-6d4a-47f2-a130-4a70e6601819",
+        "quantity": 6,
+        "attribute": null,
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "id": "gid://shopify/ProductVariant/56787807076701",
+          "title": "R",
+          "product": {
+            "id": "gid://shopify/Product/15109409735005",
+            "title": "De menseneconomie"
+          }
+        },
+        "cost": {
+          "totalAmount": {
+            "amount": "107.94"
+          }
+        }
+      },
+      {
+        "id": "gid://shopify/CartLine/82c4d5ea-f46f-4247-b762-a30dcf1b99b8",
+        "quantity": 1,
+        "attribute": null,
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "id": "gid://shopify/ProductVariant/56284809822557",
+          "title": null,
+          "product": {
+            "id": "gid://shopify/Product/15109404688733",
+            "title": "Wiskunde voor IT"
+          }
+        },
+        "cost": {
+          "totalAmount": {
+            "amount": "37.5"
+          }
+        }
+      }
+    ],
+    "buyerIdentity": {
+      "customer": {
+        "id": "gid://shopify/Customer/22680278925661"
+      }
+    }
+  }
+}
