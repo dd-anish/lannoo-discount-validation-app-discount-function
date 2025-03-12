@@ -9,52 +9,69 @@
  * @param {RunInput} input
  * @returns {FunctionRunResult}
  */
-
-/**
- * @param {RunInput} input
- * @returns {FunctionRunResult}
- */
-
 export function run(input) {
-  console.log("✅ Cart Transformer Function is Running Update 4!");
+  console.log("✅ Cart Transformer Function is Running!");
 
   const { cart } = input;
   const operations = [];
 
   for (const line of cart.lines) {
-    const { id, quantity, merchandise } = line;
+    const { id, quantity, cost, merchandise } = line;
 
     if (!merchandise || !merchandise.id) {
       console.error("❌ Missing merchandise ID for line", line);
       continue;
     }
 
-    if (quantity <= 1) {
+    // Check if the product has a 100% discount
+    const unitPrice = parseFloat(cost.totalAmount.amount) / quantity;
+
+    console.log("Unit Price is " , unitPrice);
+    console.log("For Product: " , line.merchandise.product.title);
+    console.log("Amount per line, ", line.cost.totalAmount.amount );
+    
+    
+    
+    const isDiscounted = unitPrice === 0.00;
+
+    if (!isDiscounted || quantity <= 1) {
       continue;
     }
 
-    // Step 1: Remove the existing cart line entry.
+    // Step 1: Expand the cart line into two separate lines
     operations.push({
-      update: {
-        cartLineId: id
-      }
-    });
-
-    // Step 2: Merge the updated quantity.
-    operations.push({
-      merge: {
-        parentVariantId: merchandise.id,
-        cartLines: [
+      expand: {
+        cartLineId: id,
+        expandedCartItems: [
           {
-            cartLineId: id, // Correct field
-            quantity: quantity - 1 // Correct quantity adjustment
-          }
-        ]
-      }
+            merchandiseId: merchandise.id,
+            quantity: 1, // Free unit
+            price: {
+              adjustment: {
+                fixedPrice: {
+                  amount: "0.00", // Free unit
+                },
+              },
+            },
+          },
+          {
+            merchandiseId: merchandise.id,
+            quantity: quantity - 1, // Paid units
+            price: {
+              adjustment: {
+                fixedPrice: {
+                  amount: (cost.totalAmount.amount / quantity).toFixed(2), // Paid unit price
+                },
+              },
+            },
+          },
+        ],
+      },
     });
   }
 
   if (operations.length === 0) {
+    console.log("✅ No operations to apply.");
     return { operations: [] };
   }
 
