@@ -34,6 +34,7 @@ export function run(input) {
     
     const isDiscounted = unitPrice === 0.00;
 
+    // Ensure to make below !isDiscounted
     if (!isDiscounted || quantity <= 1) {
       continue;
     }
@@ -48,7 +49,7 @@ export function run(input) {
             quantity: 1, // Free unit
             price: {
               adjustment: {
-                fixedPrice: {
+                fixedPricePerUnit: {
                   amount: "0.00", // Free unit
                 },
               },
@@ -59,7 +60,7 @@ export function run(input) {
             quantity: quantity - 1, // Paid units
             price: {
               adjustment: {
-                fixedPrice: {
+                fixedPricePerUnit: {
                   amount: (cost.totalAmount.amount / quantity).toFixed(2), // Paid unit price
                 },
               },
