@@ -1,0 +1,10 @@
+[[extensions]]
+name = "Trigger Product Metafield Updated"
+handle = "trigger-product-updated"
+type = "flow_trigger"
+description = "Trigger a flow when a product's has_sample_copy metafield is updated"
+
+[settings]
+  [[settings.fields]]
+  type = "product_reference"
+  description = "The product whose metafield was updated."
