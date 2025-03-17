@@ -1,0 +1,10 @@
+[[extensions]]
+name = "Product Updated Custom Trigger"
+type = "flow_trigger"
+handle = "product-updated"
+description = "Trigger a flow when a product data is updated"
+
+[settings]
+
+  [[settings.fields]]
+  type = "product_reference"
