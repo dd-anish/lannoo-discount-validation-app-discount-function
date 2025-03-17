@@ -10,7 +10,7 @@
  * @returns {FunctionRunResult}
  */
 export function run(input) {
-  console.log("✅ Cart Transformer Function is Running!");
+  // console.log("✅ Cart Transformer Function is Running!");
 
   const { cart } = input;
   const operations = [];
@@ -26,9 +26,9 @@ export function run(input) {
     // Check if the product has a 100% discount
     const unitPrice = parseFloat(cost.totalAmount.amount) / quantity;
 
-    console.log("Unit Price is " , unitPrice);
-    console.log("For Product: " , line.merchandise.product.title);
-    console.log("Amount per line, ", line.cost.totalAmount.amount );
+    // console.log("Unit Price is " , unitPrice);
+    // console.log("For Product: " , line.merchandise.product.title);
+    // console.log("Amount per line, ", line.cost.totalAmount.amount );
     
     
     
@@ -72,11 +72,11 @@ export function run(input) {
   }
 
   if (operations.length === 0) {
-    console.log("✅ No operations to apply.");
+    // console.log("✅ No operations to apply.");
     return { operations: [] };
   }
 
-  console.log("✅ Operations to apply:", JSON.stringify(operations, null, 2));
+  // console.log("✅ Operations to apply:", JSON.stringify(operations, null, 2));
 
   return { operations };
 }

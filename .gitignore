@@ -28,4 +28,5 @@ extensions/*/dist
 .shopify/*
 .shopify.lock
 
+ignore
 notes.txt
