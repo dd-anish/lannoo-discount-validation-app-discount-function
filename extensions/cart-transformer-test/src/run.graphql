@@ -22,8 +22,22 @@ query RunInput {
         totalAmount {
           amount
         }
+        amountPerQuantity{
+          amount
+        }
+        compareAtAmountPerQuantity{
+          amount
+        },
+        subtotalAmount{
+          amount
+        }
+        totalAmount{
+          amount
+        }
       }
+      quantity
     }
+
     buyerIdentity {
       customer {
         id
