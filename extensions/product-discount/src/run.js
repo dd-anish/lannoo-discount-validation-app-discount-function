@@ -25,7 +25,9 @@ export function run(input) {
       if(line.merchandise.__typename === "ProductVariant"){
         const isTaggedProduct = line.merchandise.product.hasAnyTag;
         const isTaggedCustomer = input.cart.buyerIdentity?.customer?.hasAnyTag;
-        return isTaggedProduct && isTaggedCustomer;
+        const canCustomerOrderSample = input.cart.buyerIdentity?.customer?.metafield?.value === "true";
+        const productHasSampleCopy = line.merchandise.product.metafield?.value === "true";
+        return isTaggedProduct && isTaggedCustomer && canCustomerOrderSample && productHasSampleCopy;
       }
       return false;
     })
@@ -38,7 +40,9 @@ export function run(input) {
       };
     });
 
-  console.log(JSON.stringify(targets, null, 2));
+  console.log("Product Metafield:", JSON.stringify(input.cart.lines[0].merchandise.product.metafield, null, 2));
+  console.log("Buyer Identity:", JSON.stringify(input.cart.buyerIdentity, null, 2));
+  console.log("Targets:", JSON.stringify(targets, null, 2));
   // If no targets, return empty discount
   if (targets.length === 0) {
     return EMPTY_DISCOUNT;
