@@ -33,6 +33,7 @@ export function run(input) {
       return {
         productVariant: {
           id: line.merchandise.id,
+          quantity: 1
         }
       };
     });
