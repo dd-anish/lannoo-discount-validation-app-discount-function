@@ -1,14 +1,14 @@
-api_version = "unstable"
+api_version = "2025-01"
 
 [[extensions]]
 name = "t:name"
-handle = "discounts-allocator"
+handle = "product-discount"
 type = "function"
 
 description = "t:description"
 
   [[extensions.targeting]]
-  target = "purchase.discounts-allocator.run"
+  target = "purchase.product-discount.run"
   input_query = "src/run.graphql"
   export = "run"
 

@@ -1,5 +1,5 @@
 {
-  "name": "discounts-allocator",
+  "name": "product-discount",
   "version": "0.0.1",
   "license": "UNLICENSED",
   "scripts": {
@@ -28,7 +28,6 @@
     "vitest": "^0.29.8"
   },
   "dependencies": {
-    "@shopify/shopify_function": "~1.0.0",
-    "decimal.js": "^10.4.3"
+    "@shopify/shopify_function": "~1.0.0"
   }
 }

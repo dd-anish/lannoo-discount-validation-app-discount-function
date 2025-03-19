@@ -1,0 +1,28 @@
+query RunInput {
+  cart {
+    lines {
+      id
+      quantity
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          id
+          product {
+            id
+            title
+            hasAnyTag(tags: ["teacher"])
+          }
+        }
+      }
+    }
+    buyerIdentity {
+      customer {
+        email
+        metafield(namespace: "custom", key: "has_sample_copy") {
+          value
+        }
+        hasAnyTag(tags: ["teacher"])
+      }
+    }
+  }
+}

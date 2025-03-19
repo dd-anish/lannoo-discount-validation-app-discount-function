@@ -9,6 +9,11 @@ Scale the Functions resource limits based on the field's length.
 directive @scaleLimits(rate: Float!) on FIELD_DEFINITION
 
 """
+Requires that exactly one field must be supplied and that field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""
 Represents a generic custom attribute, such as whether an order is a customer's first.
 """
 type Attribute {
@@ -262,16 +267,22 @@ type CartLineCost {
   totalAmount: MoneyV2!
 }
 
-type CartLineTarget {
+"""
+A discount [Target](https://shopify.dev/api/functions/reference/product-discounts/graphql/common-objects/target) that applies to a specific cart line, up to an optional quantity limit.
+"""
+input CartLineTarget {
   """
-  The ID of the line to be discounted.
+  The ID of the targeted cart line.
   """
-  cartLineId: ID!
+  id: ID!
 
   """
-  The quantity of the items on this line to be discounted.
+  The number of line items that are being discounted.
+  The default value is `null`, which represents the quantity of the matching line items.
+
+  The value is validated against: > 0.
   """
-  quantity: Int!
+  quantity: Int
 }
 
 """
@@ -2674,51 +2685,26 @@ enum DeliveryMethod {
   SHIPPING
 }
 
-type Discount implements HasMetafields {
+"""
+The discount to be applied.
+"""
+input Discount {
   """
-  The discount code, for code-based discounts.
+  The discount message.
   """
-  code: String
+  message: String
 
   """
-  The strategy to use when considering discounts proposals.
+  The targets of the discount.
+
+  This argument accepts a collection of either `ProductVariantTarget`s or `CartLineTarget`s, but not both.
   """
-  discountApplicationStrategy: DiscountApplicationStrategy!
+  targets: [Target!]!
 
   """
-  The class of the discount.
+  The value of the discount.
   """
-  discountClass: DiscountClass!
-
-  """
-  Proposals to evaluate as part of this discount.
-  """
-  discountProposals: [DiscountProposal!]!
-
-  """
-  The ID of the discount.
-  """
-  id: ID!
-
-  """
-  Returns a metafield by namespace and key that belongs to the resource.
-  """
-  metafield(
-    """
-    The key for the metafield.
-    """
-    key: String!
-
-    """
-    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
-    """
-    namespace: String
-  ): Metafield
-
-  """
-  The discount title.
-  """
-  title: String!
+  value: Value!
 }
 
 """
@@ -2742,107 +2728,9 @@ enum DiscountApplicationStrategy {
 }
 
 """
-List of the classes of discounts.
+A discount wrapper node.
 """
-enum DiscountClass {
-  """
-  A discount that applies to the order.
-  """
-  ORDER
-
-  """
-  A discount that applies to products.
-  """
-  PRODUCT
-}
-
-"""
-The input object for the Function.
-"""
-type DiscountProposal {
-  """
-  The handle of the discount proposal.
-  """
-  handle: Handle!
-
-  """
-  The message for this proposal.
-  """
-  message: String
-
-  """
-  The line items to which the discount proposal applies.
-  """
-  targets: [CartLineTarget!]!
-
-  """
-  The value of the discount.
-  """
-  value: Value!
-}
-
-input DisplayableError {
-  """
-  The ID of the discount that caused this violation.
-  """
-  discountId: ID!
-
-  """
-  The error message in the user's locale.
-  """
-  reason: String!
-}
-
-"""
-A fixed amount value.
-"""
-type FixedAmount {
-  """
-  The fixed amount value of the discount, in the currency of the cart.
-  """
-  amount: Decimal!
-
-  """
-  Allocation method of the discount, will be allocated on each line if it's
-  true, else will be allocated across target lines.
-  """
-  appliesToEachItem: Boolean!
-}
-
-"""
-The run target result.
-"""
-input FunctionRunResult {
-  """
-  The list of displayable errors.
-  """
-  displayableErrors: [DisplayableError!]
-
-  """
-  The list of applied line discounts.
-  """
-  lineDiscounts: [LineDiscount!]
-}
-
-"""
-Represents a gate configuration.
-"""
-type GateConfiguration implements HasMetafields {
-  """
-  An optional string identifier.
-  """
-  appId: String
-
-  """
-  A non-unique string used to group gate configurations.
-  """
-  handle: Handle
-
-  """
-  The ID of the gate configuration.
-  """
-  id: ID!
-
+type DiscountNode implements HasMetafields {
   """
   Returns a metafield by namespace and key that belongs to the resource.
   """
@@ -2860,23 +2748,53 @@ type GateConfiguration implements HasMetafields {
 }
 
 """
-Represents a connection from a subject to a gate configuration.
+A fixed amount value.
 """
-type GateSubject {
+input FixedAmount {
   """
-  The bound gate configuration.
+  The fixed amount value of the discount, in the currency of the cart.
+
+  The amount must be greater than or equal to 0.
   """
-  configuration(
-    """
-    The appId of the gate configurations to search for.
-    """
-    appId: String @deprecated(reason: "Use GateSubject.handle to filter gates instead.")
-  ): GateConfiguration!
+  amount: Decimal!
 
   """
-  The ID of the gate subject.
+  Whether to apply the value to each entitled item.
+
+  The default value is `false`, which causes the value to be applied once across the entitled items.
+  When the value is `true`, the value will be applied to each of the entitled items.
   """
-  id: ID!
+  appliesToEachItem: Boolean
+}
+
+"""
+The run target result. In API versions 2023-10 and beyond, this type is deprecated in favor of `FunctionRunResult`.
+"""
+input FunctionResult {
+  """
+  The strategy to apply the list of discounts.
+  """
+  discountApplicationStrategy: DiscountApplicationStrategy!
+
+  """
+  The list of discounts to be applied.
+  """
+  discounts: [Discount!]!
+}
+
+"""
+The run target result.
+"""
+input FunctionRunResult {
+  """
+  The strategy to apply the list of discounts.
+  """
+  discountApplicationStrategy: DiscountApplicationStrategy!
+
+  """
+  The list of discounts to be applied.
+  """
+  discounts: [Discount!]!
 }
 
 """
@@ -2885,21 +2803,6 @@ The Handle type appears in a JSON response as a String, but it is not intended t
 Example value: `"10079785100"`
 """
 scalar Handle
-
-"""
-Gate subjects associated to the specified resource.
-"""
-interface HasGates {
-  """
-  Returns active gate subjects bound to the resource.
-  """
-  gates(
-    """
-    The handle of the gate configurations to search for.
-    """
-    handle: Handle
-  ): [GateSubject!]!
-}
 
 """
 Represents information about the metafields associated to the specified resource.
@@ -2945,7 +2848,7 @@ Example value: `"gid://shopify/Product/10079785100"`
 scalar ID
 
 """
-The input object for the Function.
+The input object for the function.
 """
 type Input {
   """
@@ -2954,9 +2857,9 @@ type Input {
   cart: Cart!
 
   """
-  The list of discounts to be allocated.
+  The discount node executing the function.
   """
-  discounts: [Discount!]
+  discountNode: DiscountNode!
 
   """
   The localization of the Function execution context.
@@ -3711,23 +3614,6 @@ enum LanguageCode {
   ZU
 }
 
-input LineDiscount {
-  """
-  The output allocations for this line discount.
-  """
-  allocations: [OutputAllocations!]!
-
-  """
-  The ID of the cart line associated to this discount.
-  """
-  cartLineId: ID!
-
-  """
-  The quantity to which this line discount will apply.
-  """
-  quantity: Int!
-}
-
 """
 Represents limited information about the current time relative to the parent object.
 """
@@ -4232,7 +4118,17 @@ The root mutation for the API.
 """
 type MutationRoot {
   """
-  Handles the Function result for the purchase.discounts-allocator.run target.
+  Handles the Function result.
+  """
+  handleResult(
+    """
+    The result of the Function.
+    """
+    result: FunctionResult!
+  ): Void! @deprecated(reason: "Use the target-specific field instead.")
+
+  """
+  Handles the Function result for the purchase.product-discount.run target.
   """
   run(
     """
@@ -4242,24 +4138,14 @@ type MutationRoot {
   ): Void!
 }
 
-input OutputAllocations {
-  """
-  The money amount that's allocated to a line based on the associated discount.
-  """
-  amount: Decimal!
-
-  """
-  The ID of the source discount proposal.
-  """
-  discountProposalId: Handle!
-}
-
 """
 A percentage value.
 """
-type Percentage {
+input Percentage {
   """
   The percentage value.
+
+  The value is validated against: >= 0 and <= 100.
   """
   value: Decimal!
 }
@@ -4267,17 +4153,7 @@ type Percentage {
 """
 Represents a product.
 """
-type Product implements HasGates & HasMetafields {
-  """
-  Returns active gate subjects bound to the resource.
-  """
-  gates(
-    """
-    The handle of the gate configurations to search for.
-    """
-    handle: Handle
-  ): [GateSubject!]!
-
+type Product implements HasMetafields {
   """
   A unique human-friendly string of the product's title.
   """
@@ -4420,6 +4296,25 @@ type ProductVariant implements HasMetafields {
 }
 
 """
+A discount [Target](https://shopify.dev/api/functions/reference/product-discounts/graphql/common-objects/target) that can apply to any cart lines for a specific product variant, up to an
+optional quantity limit.
+"""
+input ProductVariantTarget {
+  """
+  The ID of the targeted product variant.
+  """
+  id: ID!
+
+  """
+  The maximum number of line item units to be discounted.
+  The default value is `null`, which represents the total quantity of the matching line items.
+
+  The value is validated against: > 0.
+  """
+  quantity: Int
+}
+
+"""
 Represents information about the buyer that is interacting with the cart.
 """
 type PurchasingCompany {
@@ -4548,6 +4443,29 @@ type Shop implements HasMetafields {
 }
 
 """
+A target of a discount, which determines which cart line(s) the discount will affect.
+
+A discount can have a collection of either `ProductVariantTarget`s or `CartLineTarget`s, but not both.
+
+Multiple targets with the same type and ID are the same as a single target of that type and ID with their
+quantities added together, or `null` if any of those targets have a quantity of `null`.
+
+See the [Product Discount API reference](https://shopify.dev/docs/api/functions/reference/product-discounts/graphql#functionrunresult) for examples.
+"""
+input Target @oneOf {
+  """
+  A discount [Target](https://shopify.dev/api/functions/reference/product-discounts/graphql/common-objects/target) that applies to a specific cart line, up to an optional quantity limit.
+  """
+  cartLine: CartLineTarget
+
+  """
+  A discount [Target](https://shopify.dev/api/functions/reference/product-discounts/graphql/common-objects/target) that can apply to any cart lines for a specific product variant, up to an
+  optional quantity limit.
+  """
+  productVariant: ProductVariantTarget
+}
+
+"""
 A subset of the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format that
 includes the time but not the date or timezone which is determined from context.
 For example, "05:43:21".
@@ -4557,7 +4475,17 @@ scalar TimeWithoutTimezone
 """
 The value of the discount.
 """
-union Value = FixedAmount | Percentage
+input Value @oneOf {
+  """
+  A fixed amount value.
+  """
+  fixedAmount: FixedAmount
+
+  """
+  A percentage value.
+  """
+  percentage: Percentage
+}
 
 """
 A void type that can be used to return a null value from a mutation.
