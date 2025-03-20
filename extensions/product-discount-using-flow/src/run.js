@@ -35,8 +35,8 @@ export function run(input) {
         return false;
       }
 
-      console.log("Product:", line.merchandise.product.title, ", Sample Copy:", line.merchandise.product.hasSampleCopy?.value);
-      console.log("Customer:", customer.displayName , ", Can Order Sample:", customer.canOrderSamples?.value );
+      console.log("Product:", line.merchandise.product.title, ", Sample Copy:", line.merchandise.product.hasSampleCopy?.value ?? false);
+      console.log("Customer:", customer.displayName , ", Can Order Sample:", customer.canOrderSamples?.value ?? false);
       
 
       return true;
