@@ -11,7 +11,7 @@ import { DiscountApplicationStrategy } from "../generated/api";
  */
 const EMPTY_DISCOUNT = {
   discountApplicationStrategy: DiscountApplicationStrategy.First,
-  discounts: [],
+  discounts: []
 };
 
 /**
@@ -23,10 +23,13 @@ export function run(input) {
   const targets = input.cart.lines
     .filter((line) => {
       if(line.merchandise.__typename === "ProductVariant"){
+
         const isTaggedProduct = line.merchandise.product.hasAnyTag;
         const isTaggedCustomer = input.cart.buyerIdentity?.customer?.hasAnyTag;
+        
         const canCustomerOrderSample = input.cart.buyerIdentity?.customer?.metafield?.value === "true";
         const productHasSampleCopy = line.merchandise.product.metafield?.value === "true";
+
         return isTaggedProduct && isTaggedCustomer && canCustomerOrderSample && productHasSampleCopy;
       }
       return false;
@@ -43,6 +46,7 @@ export function run(input) {
   console.log("Product Metafield:", JSON.stringify(input.cart.lines[0].merchandise.product.metafield, null, 2));
   console.log("Buyer Identity:", JSON.stringify(input.cart.buyerIdentity, null, 2));
   console.log("Targets:", JSON.stringify(targets, null, 2));
+
   // If no targets, return empty discount
   if (targets.length === 0) {
     return EMPTY_DISCOUNT;
@@ -59,7 +63,7 @@ export function run(input) {
             value: 100,
           }
         },
-        message: "This is a test discount for 100% off and for Tagged Products and Customers",
+        message: "This is discount of 100% off for Tagged Products and Customers",
       },
     ],
   };
