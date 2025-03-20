@@ -24,6 +24,7 @@ query RunInput {
     }
     buyerIdentity {
       customer {
+        displayName
         email
         metafield(namespace: "custom", key: "can_order_samples") {
           value
