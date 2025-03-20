@@ -10,7 +10,6 @@ query RunInput {
           product {
             id
             title
-            hasAnyTag(tags: ["teacher", "journalist", "influencer"])
             hasTags(tags: ["teacher", "journalist", "influencer"]) {
               hasTag
               tag
