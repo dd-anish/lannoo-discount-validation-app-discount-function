@@ -24,7 +24,8 @@ export function run(input) {
 
   // Skip if no customer
   if (!customer) {
-    return EMPTY_DISCOUNT;
+    console.log("Empty Discount 1");
+    // return EMPTY_DISCOUNT;
   }
 
   
@@ -36,7 +37,7 @@ export function run(input) {
       }
 
       console.log("Product:", line.merchandise.product.title);
-      console.log("Customer:", customer.displayName );
+      console.log("Customer:", customer ? customer.displayName : "no customer"  );
       
 
       return true;
@@ -53,7 +54,9 @@ export function run(input) {
   
   // If no targets, return empty discount
   if (targets.length === 0) {
-    return EMPTY_DISCOUNT;
+    console.log("Empty Discount 2");
+    
+    // return EMPTY_DISCOUNT;
   }
 
 
