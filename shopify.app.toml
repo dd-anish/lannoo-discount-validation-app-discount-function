@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "0197d78df38c3def40a577e1fdcd27ec"
-application_url = "https://shopify.dev/apps/default-app-home"
+application_url = "https://talecommerce.github.io/shop-custom-app-auth"
 embedded = true
 name = "lannoo-discount-validation-app"
 handle = "lannoo-discount-validation-app"
@@ -10,7 +10,7 @@ handle = "lannoo-discount-validation-app"
 include_config_on_deploy = true
 
 [webhooks]
-api_version = "unstable"
+api_version = "2025-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -18,7 +18,7 @@ scopes = "read_products, write_products, read_orders, write_orders, read_custome
 
 
 [auth]
-redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth", "https://talecommerce.github.io/shop-custom-app-auth" ]
 
 [pos]
 embedded = false
