@@ -20,6 +20,11 @@ query RunInput {
           }
         }
       }
+      cost{
+        amountPerQuantity{
+          amount
+        }
+      }
     }
     buyerIdentity {
       customer {

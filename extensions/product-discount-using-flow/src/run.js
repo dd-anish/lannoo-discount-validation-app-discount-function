@@ -1,3 +1,4 @@
+// run.js
 // @ts-check
 import { DiscountApplicationStrategy } from "../generated/api";
 
@@ -27,7 +28,13 @@ export function run(input) {
     return EMPTY_DISCOUNT;
   }
 
-  
+  const customerTags = customer.hasTags?.filter(({ hasTag }) => hasTag).map(({ tag }) => tag) || [];
+  const canCustomerOrderSample = customer.canOrderSamples?.value === "true";
+
+  console.log("Customer Email:", customer.email);
+  console.log("Customer Can Order?:", canCustomerOrderSample);
+  console.log( customer.displayName ,"Customer Tags:", customerTags);
+
   const targets = input.cart.lines
     .filter((line) => {
 
@@ -35,11 +42,18 @@ export function run(input) {
         return false;
       }
 
-      console.log("Product:", line.merchandise.product.title, ", Sample Copy:", line.merchandise.product.hasSampleCopy?.value ?? false);
-      console.log("Customer:", customer.displayName , ", Can Order Sample:", customer.canOrderSamples?.value ?? false);
-      
+      const productTags =
+        line.merchandise.product.hasTags
+          ?.filter(({ hasTag }) => hasTag)
+          .map(({ tag }) => tag) || [];
 
-      return true;
+      const matchingTags = productTags.some((tag) => customerTags.includes(tag));
+      const productHasSampleCopy = line.merchandise.product.hasSampleCopy?.value === "true";
+
+      console.log( line.merchandise.product.title ,"Product Tags: ", productTags);
+      console.log("Matching Tags:", matchingTags);
+
+      return productHasSampleCopy && canCustomerOrderSample && matchingTags;
 
     })
     .map((line) => {
@@ -50,6 +64,11 @@ export function run(input) {
         }
       };
     });
+
+  // console.log("Product Metafield:", JSON.stringify(input.cart.lines[0].merchandise.product.metafield, null, 2));
+  // console.log("Buyer Identity:", JSON.stringify(input.cart.buyerIdentity, null, 2));
+  //console.log("Targets:", JSON.stringify(targets, null, 2));
+  // console.log("Has Tags:", JSON.stringify(input.cart.buyerIdentity?.customer?.hasTags, null, 2));
   
   // If no targets, return empty discount
   if (targets.length === 0) {
