@@ -20,15 +20,22 @@ export function run(input) {
 
   const customerTags = customer?.hasTags?.filter(({ hasTag }) => hasTag).map(({ tag }) => tag) || [];
 
-  let freeShippingThreshold = null;
+  const cartSubtotal = parseFloat(input.cart.cost.subtotalAmount.amount);
+  const currencyCode = input.cart.cost.subtotalAmount.currencyCode;
 
-  // Set free shipping threshold based on customer tag
+  let discountValue = null;
+  let minOrderValue = null;
+
+  // Adjust shipping cost based on customer tags and thresholds
   if (customerTags.includes("b2b")) {
-    freeShippingThreshold = 0; // Free shipping for B2B
-  } else if (customerTags.includes("campus")) {
-    freeShippingThreshold = 50; // Free shipping for Campus
+    discountValue = 100; // Free shipping for B2B
+    minOrderValue = 0; // No minimum order value
   } else if (customerTags.includes("lannoo")) {
-    freeShippingThreshold = 24.99; // Free shipping for Lannoo
+    discountValue = 100; // Free shipping for Lannoo
+    minOrderValue = 25; // Minimum €25
+  } else if (customerTags.includes("campus")) {
+    discountValue = 100; // Free shipping for Campus
+    minOrderValue = 50; // Minimum €50
   }
 
   console.log("Customer Email:", customer?.email);
@@ -37,30 +44,25 @@ export function run(input) {
   
   
 
-  // If no matching tag, return no discount
-  if (freeShippingThreshold === null) {
+  // If no matching tag or order value is below the threshold, return no discount
+  if (discountValue === null || cartSubtotal < minOrderValue) {
     return EMPTY_DISCOUNT;
   }
 
   return {
     discounts: [
       {
-        message: `Free shipping for orders above €${freeShippingThreshold}`,
+        message: `Free shipping for orders above €${minOrderValue}`,
         targets: [
           {
-            orderSubtotal: {
-              greaterThanOrEqualTo: {
-                amount: freeShippingThreshold.toString(),
-                currencyCode: "EUR",
-              },
+            deliveryOption: {
+              handle: input.cart.deliveryGroups[0]?.deliveryOptions[0]?.handle
             },
-            
           },
         ],
         value: {
-          fixedAmount: {
-            amount: "0.00",
-            currencyCode: "EUR",
+          percentage: {
+            value: discountValue.toString(),
           },
         },
       },

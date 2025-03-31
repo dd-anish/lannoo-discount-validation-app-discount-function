@@ -1,0 +1,25 @@
+query RunInput {
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+        currencyCode
+      }
+    }
+    deliveryGroups {
+      id
+      deliveryOptions {
+        handle
+        title
+      }
+    }
+    buyerIdentity {
+      customer {
+        hasTags(tags: ["b2b", "lannoo", "campus"]) {
+          hasTag
+          tag
+        }
+      }
+    }
+  }
+}
