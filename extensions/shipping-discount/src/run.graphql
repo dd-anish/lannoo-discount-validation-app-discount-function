@@ -1,0 +1,45 @@
+query RunInput {
+  cart {
+    attribute{
+      key
+      value
+    }
+    cost{
+      subtotalAmount{
+        amount
+      }
+      totalAmount{
+        amount
+      }
+      totalDutyAmount{
+        amount
+      }
+      totalTaxAmount{
+        amount
+      }
+    }
+    lines{
+      id
+      quantity
+      cost{
+        amountPerQuantity{
+          amount
+        }
+        subtotalAmount{
+          amount
+        }
+        totalAmount{
+          amount
+        }
+      }
+    }
+    buyerIdentity {
+      customer {
+        hasTags(tags: ["b2b", "lannoo", "campus"]){
+          hasTag
+          tag
+        }
+      }
+    }
+  }
+}
