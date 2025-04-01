@@ -20,18 +20,17 @@ export function run(input) {
   const customerTags = customer?.hasTags?.filter(({ hasTag }) => hasTag).map(({ tag }) => tag) || [];
 
   const cartSubtotal = parseFloat(input.cart.cost.subtotalAmount.amount);
-
+  const cartAttributes = Array.isArray(input.cart.attribute) ? input.cart.attribute : [];
+  const customerType = cartAttributes.find(attr => attr.key === "customer_type")?.value || "guest";
+  
   let freeShipping = false;
 
-  if (customerTags.includes("b2b")) {
-    // Free shipping for B2B
-    freeShipping = true;
-  } else if (customerTags.includes("lannoo") && cartSubtotal >= 25) {
-    // Free shipping for Lannoo if order is above €25
-    freeShipping = true;
-  } else if (customerTags.includes("campus") && cartSubtotal >= 50) {
-    // Free shipping for Campus if order is above €50
-    freeShipping = true;
+  if (customerType === "b2b") {
+    freeShipping = true; // Free shipping for B2B from €0
+  } else if (customerType === "lannoo_normal" && cartSubtotal >= 25) {
+    freeShipping = true; // Free shipping for Lannoo Normal if order is above €25
+  } else if (customerType === "lannoo_campus" && cartSubtotal >= 50) {
+    freeShipping = true; // Free shipping for Lannoo Campus if order is above €50
   }
 
   console.log(`Customer Tags: ${customerTags}`);

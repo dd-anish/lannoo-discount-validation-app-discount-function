@@ -1,5 +1,9 @@
 query RunInput {
   cart {
+    attribute{
+      key
+      value
+    }
     cost {
       subtotalAmount {
         amount
