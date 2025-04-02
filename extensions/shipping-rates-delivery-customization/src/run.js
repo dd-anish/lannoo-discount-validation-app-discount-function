@@ -47,10 +47,10 @@ export function run(input) {
     operations: input.cart.deliveryGroups.flatMap((group) =>
       group.deliveryOptions.map((option) =>
         freeShipping
-          ? option.title.toLowerCase().includes("free")
+          ? option.title?.toLowerCase().includes("free")
             ? { rename: { deliveryOptionHandle: option.handle, title: "Complimentary Delivery" } }
             : { hide: { deliveryOptionHandle: option.handle } }
-          : option.title.toLowerCase().includes("standard")
+          : option.title?.toLowerCase().includes("standard")
             ? { rename: { deliveryOptionHandle: option.handle, title: "Standard" } }
             : { hide: { deliveryOptionHandle: option.handle } }
       )
