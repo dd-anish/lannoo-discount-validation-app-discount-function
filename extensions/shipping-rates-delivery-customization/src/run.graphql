@@ -1,7 +1,6 @@
 query RunInput {
   cart {
-    attribute{
-      key
+    attribute(key:"customerSalesChannel" ){
       value
     }
     cost {
