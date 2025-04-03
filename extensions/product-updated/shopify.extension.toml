@@ -3,8 +3,6 @@ name = "Product Updated Custom Trigger"
 type = "flow_trigger"
 handle = "product-updated"
 description = "Trigger a flow when a product data is updated"
-schema = "./schema.graphql"
-return_type_ref = "ProductReference"
 
 [settings]
   [[settings.fields]]

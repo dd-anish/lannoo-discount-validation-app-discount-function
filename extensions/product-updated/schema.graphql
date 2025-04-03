@@ -1,3 +1,0 @@
-type ProductReference {
-  product_id: ID!
-}
