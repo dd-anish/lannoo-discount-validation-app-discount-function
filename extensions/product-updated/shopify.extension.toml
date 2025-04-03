@@ -7,6 +7,5 @@ schema = "./schema.graphql"
 return_type_ref = "ProductReference"
 
 [settings]
-
   [[settings.fields]]
   type = "product_reference"
