@@ -18,7 +18,7 @@ query RunInput {
     }
     buyerIdentity {
       customer {
-        hasTags(tags: ["b2b", "lannoo", "campus"]) {
+        hasTags(tags: ["b2b", "lannoo_normal", "lannoo_campus"]) {
           hasTag
           tag
         }

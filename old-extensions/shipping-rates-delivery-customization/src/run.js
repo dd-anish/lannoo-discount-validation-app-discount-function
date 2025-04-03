@@ -44,7 +44,7 @@ export function run(input) {
 
   // Modify delivery options: Keep only free shipping if Tags Matched and Order Value
   return {
-    operations: input.cart.deliveryGroups.flatMap((group) =>
+    /* operations: input.cart.deliveryGroups.flatMap((group) =>
       group.deliveryOptions.map((option) =>
         freeShipping
           ? option.title?.toLowerCase().includes("free")
@@ -54,7 +54,8 @@ export function run(input) {
             ? { rename: { deliveryOptionHandle: option.handle, title: "Standard" } }
             : { hide: { deliveryOptionHandle: option.handle } }
       )
-    ),
+    ), */
+    operations: []
   };
   
 }

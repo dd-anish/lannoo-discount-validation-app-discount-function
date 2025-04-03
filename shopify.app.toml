@@ -22,3 +22,9 @@ redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth", "https:/
 
 [pos]
 embedded = false
+
+
+extension_directories = [
+    "extensions/product-updated",
+    "extensions/shipping-discount"
+]
