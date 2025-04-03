@@ -22,24 +22,24 @@ export function run(input) {
   const cartSubtotal = parseFloat(input.cart.cost.subtotalAmount.amount);
 
   const cartAttributes = input.cart.attribute?.value;
-  const customerSalesChannel = cartAttributes || "guest";
+  const customerBrandSource = cartAttributes || "guest";
   
   let freeShipping = false;
 
-  if (customerSalesChannel === "b2b") {
+  if (customerBrandSource === "b2b") {
     freeShipping = true; // Free shipping for B2B from €0
 
-  } else if (customerSalesChannel === "lannoo_normal" && cartSubtotal >= 25) {
+  } else if (customerBrandSource === "lannoo_normal" && cartSubtotal >= 25) {
     freeShipping = true; // Free shipping for Lannoo Normal if order is above €25
 
-  } else if (customerSalesChannel === "lannoo_campus" && cartSubtotal >= 50) {
+  } else if (customerBrandSource === "lannoo_campus" && cartSubtotal >= 50) {
     freeShipping = true; // Free shipping for Lannoo Campus if order is above €50
   }
 
   console.log(`Customer Tags: ${customerTags}`);
   console.log(`Cart Subtotal: €${cartSubtotal}`);
   console.log(`Free Shipping: ${freeShipping}`);
-  console.log(`Customer Type Attribute Value: ${customerSalesChannel}`);
+  console.log(`Customer Brand Source Attribute Value: ${customerBrandSource}`);
   
 
   // Modify delivery options: Keep only free shipping if Tags Matched and Order Value
