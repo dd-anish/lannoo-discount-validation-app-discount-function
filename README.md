@@ -24,6 +24,12 @@ Whether you choose to use this template or another one, you can use your preferr
   shopify app generate extension
   ```
 
+- Generate the Types after editing `run.graphql` (Only for JS / TS)
+
+  ```shell
+  shopify app function typegen
+  ```
+
 - Deploy the app to Partner's Account
 
   ```shell
