@@ -6,6 +6,40 @@ This template doesn't include a server or the ability to embed a page in the Sho
 
 Whether you choose to use this template or another one, you can use your preferred package manager and the Shopify CLI with [these steps](#installing-the-template).
 
+## Commands
+
+- Install the App
+
+  ```shell
+  npm init @shopify/app@latest
+  ```
+  or
+  ```shell
+  shopify app init
+  ```
+
+- Generate the Extension
+
+  ```shell
+  shopify app generate extension
+  ```
+
+- Deploy the app to Partner's Account
+
+  ```shell
+  shopify app deploy
+  ```
+
+- Run Locally if Development Preview is ON
+
+  ```shell
+  shopify app dev
+  ```
+
+- Install the App in Admin 
+  - Click on **Preview URL** link in the terminal
+  - It will ask you to Install the App or if scopes are updated in `toml` file then it will ask to update the scopes
+
 ## Benefits
 
 Shopify apps are built on a variety of Shopify tools to create a great merchant experience. The [create an app](https://shopify.dev/docs/apps/getting-started/create) tutorial in our developer documentation will guide you through creating a Shopify app.
