@@ -19,3 +19,10 @@ description = "t:description"
   [extensions.ui.paths]
   create = "/"
   details = "/"
+
+  [extensions.ui]
+  handle = "product-discount-admin-ui-block"
+
+  [extensions.input.variables]
+  namespace = "$app:product-discount-admin-ui"
+  key = "function-configuration"

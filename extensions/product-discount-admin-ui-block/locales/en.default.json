@@ -1,0 +1,6 @@
+{
+  "name": "Excluded collections discount",
+  "description": "Offer a discount on all collections except the ones selected",
+  "discountPercentage": "Discount percentage",
+  "addCollections": "Add collections"
+}
