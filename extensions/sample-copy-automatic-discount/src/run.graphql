@@ -1,0 +1,7 @@
+query RunInput {
+  discountNode {
+    metafield(namespace: "$app:sample-copy-automatic-discount", key: "function-configuration") {
+      value
+    }
+  }
+}
