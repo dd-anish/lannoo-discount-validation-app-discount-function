@@ -52,12 +52,21 @@ export function generateDeliveryRun(input) {
             // The Customer should not have claimed the product before
             const alreadyClaimedSampleCopy = claimedFreeSampleCopyProductIds.includes(line.merchandise.product.id);
 
+            const isPhysicalProduct = line.merchandise?.requiresShipping;
+
             // All Conditions for the Discounting a Product
-            const isProductEligibleForDiscount = productHasSampleCopy && canCustomerOrderSample && matchingSegment && !alreadyClaimedSampleCopy;
+            const isProductEligibleForDiscount = productHasSampleCopy && canCustomerOrderSample && matchingSegment && !alreadyClaimedSampleCopy && isPhysicalProduct;
 
             // console.log("New Discount on Product: ", isProductEligibleForDiscount);
-
-
+            
+            console.log("Product Name:", line.merchandise?.product.title);
+            console.log("Product Type:", line.merchandise?.product.productType);
+            console.log("Product Requires Shipping:", line.merchandise?.requiresShipping);
+            
+            console.log("isProductEligibleForDiscount", productHasSampleCopy + " " + canCustomerOrderSample + matchingSegment + !alreadyClaimedSampleCopy + " " + isPhysicalProduct);
+            
+            console.log("Eligible:", isProductEligibleForDiscount);
+            
             return isProductEligibleForDiscount;
 
         })
@@ -70,7 +79,7 @@ export function generateDeliveryRun(input) {
             };
         });
 
-    // If no targets, return empty shipping discount
+    // If targets, return a FREE Shipping
     if (targets.length > 0) {
         // Loop through all delivery groups and options
         input.cart.deliveryGroups.forEach((group) => {

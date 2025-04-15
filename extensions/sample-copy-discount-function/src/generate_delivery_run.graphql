@@ -29,7 +29,9 @@ query DeliveryInput {
             productSegment: metafield(namespace: "custom", key: "product_segment"){
               value
             }
+            productType 
           }
+          requiresShipping
         }
       }
     }
