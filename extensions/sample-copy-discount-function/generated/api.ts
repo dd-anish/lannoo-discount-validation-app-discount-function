@@ -2621,12 +2621,12 @@ export enum WeightUnit {
   Pounds = 'POUNDS'
 }
 
-export type CartInputVariables = Exact<{ [key: string]: never; }>;
+export type RunInputVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CartInput = { __typename?: 'Input', cart: { __typename?: 'Cart', lines: Array<{ __typename?: 'CartLine', id: string, cost: { __typename?: 'CartLineCost', subtotalAmount: { __typename?: 'MoneyV2', amount: any } } }> } };
+export type RunInput = { __typename?: 'Input', cart: { __typename?: 'Cart', attribute?: { __typename?: 'Attribute', value?: string | null } | null, lines: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename: 'CustomProduct' } | { __typename: 'ProductVariant', id: string, product: { __typename?: 'Product', id: string, title: string, hasSampleCopy?: { __typename?: 'Metafield', value: string } | null, productSegment?: { __typename?: 'Metafield', value: string } | null } }, cost: { __typename?: 'CartLineCost', amountPerQuantity: { __typename?: 'MoneyV2', amount: any } } }>, buyerIdentity?: { __typename?: 'BuyerIdentity', customer?: { __typename?: 'Customer', displayName: string, email?: string | null, canOrderSamples?: { __typename?: 'Metafield', value: string } | null, customerSegment?: { __typename?: 'Metafield', value: string } | null, claimedFreeSampleCopyProductIds?: { __typename?: 'Metafield', jsonValue: any } | null } | null } | null } };
 
 export type DeliveryInputVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DeliveryInput = { __typename?: 'Input', cart: { __typename?: 'Cart', deliveryGroups: Array<{ __typename?: 'CartDeliveryGroup', id: string }> } };
+export type DeliveryInput = { __typename?: 'Input', cart: { __typename?: 'Cart', attribute?: { __typename?: 'Attribute', value?: string | null } | null, deliveryGroups: Array<{ __typename?: 'CartDeliveryGroup', id: string, deliveryOptions: Array<{ __typename?: 'CartDeliveryOption', handle: any, title?: string | null, code?: string | null, deliveryMethodType: DeliveryMethod, cost: { __typename?: 'MoneyV2', amount: any } }> }>, lines: Array<{ __typename?: 'CartLine', merchandise: { __typename: 'CustomProduct' } | { __typename: 'ProductVariant', id: string, product: { __typename?: 'Product', id: string, title: string, hasSampleCopy?: { __typename?: 'Metafield', value: string } | null, productSegment?: { __typename?: 'Metafield', value: string } | null } } }>, buyerIdentity?: { __typename?: 'BuyerIdentity', customer?: { __typename?: 'Customer', displayName: string, email?: string | null, canOrderSamples?: { __typename?: 'Metafield', value: string } | null, customerSegment?: { __typename?: 'Metafield', value: string } | null, claimedFreeSampleCopyProductIds?: { __typename?: 'Metafield', jsonValue: any } | null } | null } | null } };
