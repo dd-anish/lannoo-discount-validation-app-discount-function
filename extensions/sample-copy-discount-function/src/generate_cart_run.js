@@ -30,7 +30,7 @@ export function generateCartRun(input) {
         return maxLine;
     }, input.cart.lines[0]);
 
-    // console.log("Max: ", JSON.stringify(maxCartLine, null, 2));
+    console.log("Max: ", JSON.stringify(maxCartLine, null, 2));
 
     return {
         operations: [

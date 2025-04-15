@@ -15,6 +15,8 @@ export function generateDeliveryRun(input) {
 
     const firstDeliveryGroup = input.cart.deliveryGroups[0];
     if (!firstDeliveryGroup) {
+        console.log("No Delivery Gorup");
+        
         throw new Error('No delivery groups found');
     }
 
