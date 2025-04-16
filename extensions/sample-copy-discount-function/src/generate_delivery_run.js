@@ -19,88 +19,57 @@ const NO_OPERATIONS = {
 
 export function generateDeliveryRun(input) {
 
+    const customer = input.cart.buyerIdentity?.customer;
+
+    // Skip if no customer
+    if (!customer) {
+
+        console.log("Shipping: Return if no customer");
+        return NO_OPERATIONS;
+    }
+
+    const shippingRequiredLines = input.cart.lines.filter((line) => {
+
+        const sample_copy_opted = line.sampleCopyOpted?.value === "true" ? true : false;
+
+        console.log(
+            "Product Name:", line.merchandise.product?.title,
+            "| Requires Shipping:", line.merchandise?.requiresShipping,
+            "| Sample Copy Opted Attribute:", sample_copy_opted
+        );
+
+        return line.merchandise?.__typename === "ProductVariant" &&
+            line.merchandise?.requiresShipping === true;
+    });
+
+    const allShippingLinesOptedForSampleCopy = shippingRequiredLines.every(
+        (line) => line.sampleCopyOpted?.value === "true"
+    );
+
+    // Skip if requires shipping product is non sample copy opted product
+    if (!allShippingLinesOptedForSampleCopy) {
+        console.log("Some shipping-required cart lines did NOT opt for sample copy.");
+        return NO_OPERATIONS;
+    }
+
     let standardOptionHandle = null;
 
-    const customer = input.cart.buyerIdentity?.customer;
-    const sample_copy_opted = input.cart.attribute?.value === "true";
-
-    // Skip if no customer or Cart Attribute False
-    if (!customer || !sample_copy_opted) {
-        console.log("Shipping: Return if no customer or Cart Attribute False");
-
-        return NO_OPERATIONS;
-    }
-
-    const canCustomerOrderSample = customer.canOrderSamples?.value === "true";
-    const customerSegment = customer.customerSegment?.value;
-    const claimedFreeSampleCopyProductIds = customer.claimedFreeSampleCopyProductIds?.jsonValue || [];
-
-    const targets = input.cart.lines
-        .filter((line) => {
-
-            if (line.merchandise.__typename !== "ProductVariant") {
-                return false;
+    // Loop through all delivery groups and options
+    input.cart.deliveryGroups.forEach((group) => {
+        group.deliveryOptions.forEach((option) => {
+            // console.log("Option title:", option.title);
+            if (option.title?.toLowerCase() === "standard") {
+                standardOptionHandle = option.handle;
             }
-
-            const productSegment = line.merchandise?.product.productSegment?.value;
-
-            const matchingSegment = customerSegment === productSegment;
-
-            // The Product Metafield: has_sample_copy should be TRUE and mentioning === is must as without it the checking is not validated properly
-            const productHasSampleCopy = line.merchandise.product.hasSampleCopy?.value === 'true';
-
-            // The Customer should not have claimed the product before
-            const alreadyClaimedSampleCopy = claimedFreeSampleCopyProductIds.includes(line.merchandise.product.id);
-
-            const isPhysicalProduct = line.merchandise?.requiresShipping;
-
-            // All Conditions for the Discounting a Product
-            const isProductEligibleForDiscount = productHasSampleCopy && canCustomerOrderSample && matchingSegment && !alreadyClaimedSampleCopy && isPhysicalProduct;
-
-            // console.log("New Discount on Product: ", isProductEligibleForDiscount);
-            
-            console.log("Product Name:", line.merchandise?.product.title);
-            console.log("Product Type:", line.merchandise?.product.productType);
-            console.log("Product Requires Shipping:", line.merchandise?.requiresShipping);
-            
-            console.log("isProductEligibleForDiscount", productHasSampleCopy + " " + canCustomerOrderSample + matchingSegment + !alreadyClaimedSampleCopy + " " + isPhysicalProduct);
-            
-            console.log("Eligible:", isProductEligibleForDiscount);
-            
-            return isProductEligibleForDiscount;
-
-        })
-        .map((line) => {
-            return {
-                cartLine: {
-                    id: line.id,
-                    quantity: 1
-                }
-            };
         });
-
-    // If targets, return a FREE Shipping
-    if (targets.length > 0) {
-        // Loop through all delivery groups and options
-        input.cart.deliveryGroups.forEach((group) => {
-            group.deliveryOptions.forEach((option) => {
-                // console.log("Option title:", option.title);
-                if (option.title?.toLowerCase() === "standard") {
-                    standardOptionHandle = option.handle;
-                }
-            });
-        });
-    }
-    else {
-        console.log("Shipping: NO Operations as targets is 0");
-        return NO_OPERATIONS;
-    }
+    });
 
     if (!standardOptionHandle) {
         console.log("No 'Standard' delivery option found.");
         return NO_OPERATIONS;
     }
 
+    console.log("Applied FREE Shipping");
     // console.log("Standard delivery option handle:", standardOptionHandle);
 
     return {

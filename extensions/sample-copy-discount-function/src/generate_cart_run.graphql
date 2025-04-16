@@ -1,15 +1,16 @@
 query RunInput {
   cart {
-    attribute(key: "sample_copy_opt_in"){
-      value
-    }
     lines {
       id
       quantity
+      sampleCopyOpted: attribute(key: "sample_copy_opted"){
+        value
+      }
       merchandise {
         __typename
         ... on ProductVariant {
           id
+          requiresShipping
           product {
             id
             title

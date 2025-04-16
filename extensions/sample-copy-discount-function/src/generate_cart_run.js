@@ -28,17 +28,13 @@ export function generateCartRun(input) {
     }
 
     const customer = input.cart.buyerIdentity?.customer;
-    const sample_copy_opted = input.cart.attribute?.value === "true";
 
     // Skip if no customer or Cart Attribute False
-    if (!customer || !sample_copy_opted) {
-        console.log("Return if no customer or Cart Attribute False");
+    if (!customer) {
+        console.log("Return if no customer");
 
         return NO_OPERATIONS;
     }
-
-    console.log("Cart Attribute: ", sample_copy_opted);
-
 
     const canCustomerOrderSample = customer.canOrderSamples?.value === "true";
     const customerSegment = customer.customerSegment?.value;
@@ -68,9 +64,17 @@ export function generateCartRun(input) {
             // The Customer should not have claimed the product before
             const alreadyClaimedSampleCopy = claimedFreeSampleCopyProductIds.includes(line.merchandise.product.id);
 
-            // All Conditions for the Discounting a Product
-            const isProductEligibleForDiscount = productHasSampleCopy && canCustomerOrderSample && matchingSegment && !alreadyClaimedSampleCopy;
+            // The Product is added via Add Free Sample Copy
+            const sample_copy_opted = line.sampleCopyOpted?.value === "true" ? true : false;
 
+            // All Conditions for the Discounting a Product
+            const isProductEligibleForDiscount = sample_copy_opted && productHasSampleCopy && canCustomerOrderSample && matchingSegment && !alreadyClaimedSampleCopy;
+
+            console.log("Product Name:", line.merchandise?.product.title);
+            // console.log("Merchandise ID:", line.merchandise?.id);
+            // console.log("Product ID:", line.merchandise?.product.id);
+            console.log("Product Opted for Sample Copy:", sample_copy_opted);
+            console.log("Product Requires Shipping:", line.merchandise?.requiresShipping);
             // console.log("New Discount on Product: ", isProductEligibleForDiscount);
 
 
