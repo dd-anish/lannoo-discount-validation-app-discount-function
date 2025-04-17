@@ -1,5 +1,8 @@
 query DeliveryInput {
   cart {
+    customerBrandSource: attribute(key:"customerBrandSource" ){
+      value
+    }
     cost{
       subtotalAmount{
         amount
