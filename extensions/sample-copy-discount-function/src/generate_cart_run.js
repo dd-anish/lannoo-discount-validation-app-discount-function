@@ -61,8 +61,10 @@ export function generateCartRun(input) {
             // The Product Metafield: has_sample_copy should be TRUE and mentioning === is must as without it the checking is not validated properly
             const productHasSampleCopy = line.merchandise.product.hasSampleCopy?.value === 'true';
 
+            const currentProductGID = line.merchandise.product.id
             // The Customer should not have claimed the product before
-            const alreadyClaimedSampleCopy = claimedFreeSampleCopyProductIds.includes(line.merchandise.product.id);
+            // const alreadyClaimedSampleCopy = claimedFreeSampleCopyProductIds.includes(line.merchandise.product.id);
+            const alreadyClaimedSampleCopy = claimedFreeSampleCopyProductIds.some(productGID => productGID === currentProductGID);
 
             // The Product is added via Add Free Sample Copy
             const sample_copy_opted = line.sampleCopyOpted?.value === "true" ? true : false;
@@ -70,12 +72,13 @@ export function generateCartRun(input) {
             // All Conditions for the Discounting a Product
             const isProductEligibleForDiscount = sample_copy_opted && productHasSampleCopy && canCustomerOrderSample && matchingSegment && !alreadyClaimedSampleCopy;
 
-            console.log("Product Name:", line.merchandise?.product.title);
+            // console.log("Product Name:", line.merchandise?.product.title);
             // console.log("Merchandise ID:", line.merchandise?.id);
             // console.log("Product ID:", line.merchandise?.product.id);
-            console.log("Product Opted for Sample Copy:", sample_copy_opted);
-            console.log("Product Requires Shipping:", line.merchandise?.requiresShipping);
+            // console.log("Product Opted for Sample Copy:", sample_copy_opted);
+            // console.log("Product Requires Shipping:", line.merchandise?.requiresShipping);
             // console.log("New Discount on Product: ", isProductEligibleForDiscount);
+            console.log("Already Claimed Sample Copy: ", alreadyClaimedSampleCopy, "| Product Title: ", line.merchandise?.product?.title);
 
 
             return isProductEligibleForDiscount;

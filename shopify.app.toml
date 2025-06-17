@@ -5,9 +5,14 @@ application_url = "https://talecommerce.github.io/shop-custom-app-auth?client_id
 embedded = true
 name = "lannoo-discount-validation-app"
 handle = "lannoo-discount-validation-app"
+extension_directories = [
+    "extensions/product-updated",
+    "extensions/sample-copy-discount-function"
+]
 
 [build]
 include_config_on_deploy = true
+dev_store_url = "lannoo-meulenhoff-dev.myshopify.com"
 
 [webhooks]
 api_version = "2025-01"
@@ -22,8 +27,3 @@ redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth", "https:/
 
 [pos]
 embedded = false
-
-extension_directories = [
-    "extensions/product-updated",
-    "extensions/shipping-discount"
-]

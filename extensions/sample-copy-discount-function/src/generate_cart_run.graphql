@@ -39,7 +39,7 @@ query RunInput {
         customerSegment: metafield(namespace: "custom", key: "job_type"){
               value
             }
-        claimedFreeSampleCopyProductIds: metafield(namespace: "customer", key: "claimed_free_sample_copy_product_ids"){
+        claimedFreeSampleCopyProductIds: metafield(namespace: "custom", key: "claimed_free_product_ids"){
           jsonValue
         }
       }
